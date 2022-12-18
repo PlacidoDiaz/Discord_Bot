@@ -1,28 +1,56 @@
 package modelo;
 
 public class Jugador {
-	
 	String discid, usuario;
-	int dinero, lvl, exp, suelo, mapa, att, deff, hp, maxhp;
+	int id, dinero, lvl, exp, att, def, hp, maxhp, item1, item2, item3, item4, item5;
 	double porcentaje;
 	
-	public Jugador(String discid, String usuario, int dinero, int lvl, int exp, int suelo, int mapa, int att, int deff, 
-			int hp, int maxhp, double porcentaje) {
-		super();
+	// DATABASE
+	public Jugador(int id,String discid, String usuario, int dinero, int lvl, int exp, int att, int def, 
+			int hp, int maxhp, double porcentaje, int item1, int item2, int item3, int item4, int item5) {
+		this.id = id;
 		this.discid = discid;
 		this.usuario = usuario;
 		this.dinero = dinero;
 		this.lvl = lvl;
 		this.exp = exp;
-		this.suelo = suelo;
-		this.mapa = mapa;
 		this.att = att;
-		this.deff = deff;
+		this.def = def;
 		this.hp = hp;
 		this.maxhp = maxhp;
 		this.porcentaje = porcentaje;
+		this.item1 = item1;
+		this.item2 = item2;
+		this.item3 = item3;
+		this.item4 = item4;
+		this.item5 = item5;
 	}
 
+	// DEFAULT
+	public Jugador() {
+		this.dinero = 100;
+		this.lvl = 1;
+		this.exp = 0;
+		this.porcentaje = 0.00;
+		this.att = 5;
+		this.def = 5;
+		this.hp = 10;
+		this.maxhp = 10;
+		this.item1 = 0;
+		this.item2 = 0;
+		this.item3 = 0;
+		this.item4 = 0;
+		this.item5 = 0;
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public String getDiscid() {
 		return discid;
 	}
@@ -63,22 +91,6 @@ public class Jugador {
 		this.exp = exp;
 	}
 
-	public int getSuelo() {
-		return suelo;
-	}
-
-	public void setSuelo(int suelo) {
-		this.suelo = suelo;
-	}
-
-	public int getMapa() {
-		return mapa;
-	}
-
-	public void setMapa(int mapa) {
-		this.mapa = mapa;
-	}
-
 	public int getAtt() {
 		return att;
 	}
@@ -87,12 +99,12 @@ public class Jugador {
 		this.att = att;
 	}
 
-	public int getDeff() {
-		return deff;
+	public int getDef() {
+		return def;
 	}
 
-	public void setDeff(int deff) {
-		this.deff = deff;
+	public void setDef(int deff) {
+		this.def = deff;
 	}
 
 	public int getHp() {
@@ -118,5 +130,47 @@ public class Jugador {
 	public void setPorcentaje(double porcentaje) {
 		this.porcentaje = porcentaje;
 	}
+
+	public int getItem1() {
+		return item1;
+	}
+
+	public void setItem1(int item1) {
+		this.item1 = item1;
+	}
+
+	public int getItem2() {
+		return item2;
+	}
+
+	public void setItem2(int item2) {
+		this.item2 = item2;
+	}
+
+	public int getItem3() {
+		return item3;
+	}
+
+	public void setItem3(int item3) {
+		this.item3 = item3;
+	}
+
+	public int getItem4() {
+		return item4;
+	}
+
+	public void setItem4(int item4) {
+		this.item4 = item4;
+	}
+
+	public int getItem5() {
+		return item5;
+	}
+
+	public void setItem5(int item5) {
+		this.item5 = item5;
+	}
+	
+	
 	
 }

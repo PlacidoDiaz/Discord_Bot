@@ -2,6 +2,7 @@ package comandos;
 
 import java.lang.reflect.Member;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Random;
 
 import javax.swing.text.AttributeSet.ColorAttribute;
@@ -10,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import controlador.JugadorControlador;
 import modelo.DbConnection;
+import modelo.Jugador;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -57,14 +59,70 @@ public class Comandos extends ListenerAdapter {
 	        } 
 	        
 	      //  PRUEBA CONEXION MYSQL
-	        
 	        if (event.getMessage().getContentRaw().equals(prefix+"conexion")) {
-	        	DbConnection dbc=new DbConnection();
-				Connection cn=dbc.getConnection();
-				dbc.disconnect();
-				dbc=null;
+	        	try {
+					DbConnection dbc=new DbConnection();
+					Connection cn=dbc.getConnection();
+		            event.getMessage().reply("Conexion exitosa").queue();
+					dbc.disconnect();
+					dbc=null;
+				} catch (Exception e) {
+		            event.getMessage().reply("error").queue();
+				}
+		        	
 	        }
-	       	        
+	     
+	     // COMANDOS IMPORTANTES 
+	        
+	        // COMPRUEBA SI EXISTE JUGADOR
+	        if (event.getMessage().getContentRaw().equals(prefix+"jugador")) {
+	        	try {
+	        		DbConnection dbc = new DbConnection();
+					Connection cn = dbc.getConnection();
+					JugadorControlador jugadorControlador = new JugadorControlador(cn);
+		            
+					String idDiscord = String.valueOf(event.getAuthor().getIdLong());
+					Jugador jugador = jugadorControlador.getJugador(idDiscord);
+					
+					if(jugador!=null) {
+			            event.getMessage().reply("El jugador "+jugador.getUsuario()+" existe").queue();
+					} else {
+			            event.getMessage().reply("No existe ningún jugador, puedes crear uno utilizando el comando !crear").queue();
+					}
+					
+				} catch (SQLException e) {
+		            event.getMessage().reply("error").queue();
+				}
+	        }
+	        
+	        // CREAR JUGADOR
+	        if (event.getMessage().getContentRaw().equals(prefix+"crear")) {
+	        	event.getChannel().sendTyping().queue(); // aparece bot escribiendo
+	        	
+	            String idDiscord = String.valueOf(event.getAuthor().getIdLong());
+	            String nombre = String.valueOf(event.getAuthor().getName());
+	            
+	            Jugador nuevoJugador = new Jugador();
+				nuevoJugador.setDiscid(idDiscord);
+				nuevoJugador.setUsuario(nombre);
+	            
+				try {
+					DbConnection dbc = new DbConnection();
+					Connection cn = dbc.getConnection();
+					JugadorControlador jugadorControlador=new JugadorControlador(cn);
+				
+					// AÑADIR JUGADOR
+					if(jugadorControlador.agregarJugador(nuevoJugador)) {
+						event.getMessage().reply("Jugador añadido").queue();
+					} else {
+						event.getMessage().reply("No se puedo añadido").queue();
+					}
+					
+				} catch (SQLException e) {
+		            event.getMessage().reply("error").queue();
+				}
+				
+	        }
 	        
 	    }
 	 @Override
