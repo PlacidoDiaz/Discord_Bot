@@ -74,7 +74,7 @@ public class Comandos extends ListenerAdapter {
 	     
 	     // COMANDOS IMPORTANTES 
 	        
-	        // COMPRUEBA SI EXISTE JUGADOR
+	        // DEVUELVE FICHA DE JUGADOR
 	        if (event.getMessage().getContentRaw().equals(prefix+"jugador")) {
 	        	try {
 	        		DbConnection dbc = new DbConnection();
@@ -85,9 +85,49 @@ public class Comandos extends ListenerAdapter {
 					Jugador jugador = jugadorControlador.getJugador(idDiscord);
 					
 					if(jugador!=null) {
-			            event.getMessage().reply("El jugador "+jugador.getUsuario()+" existe").queue();
+						EmbedBuilder embed = new EmbedBuilder();
+			        	embed.setTitle("FICHA  "+jugador.getUsuario().toUpperCase());
+			        	embed.addField("Estadísticas: ", ":moneybag: Dinero: " + String.valueOf(jugador.getDinero())+"\n"+
+			        								   	 ":pencil: Nivel: " + String.valueOf(jugador.getLvl())+"\n"+
+			        								   	 ":test_tube: EXP: " + String.valueOf(jugador.getExp())+"\n"+
+			        								   	 ":drop_of_blood: Crítico: " + String.valueOf(jugador.getPorcentaje())+" % \n"+
+			        								   	 ":crossed_swords: Daño: " + String.valueOf(jugador.getAtt())+"\n"+
+			        								   	 ":shield: Defensa: " + String.valueOf(jugador.getDef())+"\n"+
+			        								   	 ":heart: Vida: " + String.valueOf(jugador.getMaxhp())+"\n",false);
+			        	event.getChannel().sendMessageEmbeds(embed.build()).queue();
+			        	embed.clear();
 					} else {
-			            event.getMessage().reply("No existe ningún jugador, puedes crear uno utilizando el comando !crear").queue();
+			            event.getMessage().reply("No existe ningún jugador, puedes crear uno utilizando el comando `!crear`").queue();
+					}
+					
+				} catch (SQLException e) {
+		            event.getMessage().reply("error").queue();
+				}
+	        }
+	        
+	     // DEVUELVE INVENTARIO DE JUGADOR
+	        if (event.getMessage().getContentRaw().equals(prefix+"inventario")) {
+	        	try {
+	        		DbConnection dbc = new DbConnection();
+					Connection cn = dbc.getConnection();
+					JugadorControlador jugadorControlador = new JugadorControlador(cn);
+		            
+					String idDiscord = String.valueOf(event.getAuthor().getIdLong());
+					Jugador jugador = jugadorControlador.getJugador(idDiscord);
+					
+					if(jugador!=null) {
+						EmbedBuilder embed = new EmbedBuilder();
+			        	embed.setTitle("Inventario "+jugador.getUsuario());
+			        	embed.addField("Item 1", String.valueOf(jugador.getItem1()),false);
+			        	embed.addField("Item 2", String.valueOf(jugador.getItem2()),false);
+			        	embed.addField("Item 3", String.valueOf(jugador.getItem3()),false);
+			        	embed.addField("Item 4", String.valueOf(jugador.getItem4()),false);
+			        	embed.addField("Item 5", String.valueOf(jugador.getItem5()),false);
+			        	event.getChannel().sendMessageEmbeds(embed.build()).queue();
+			        	embed.clear();
+						
+					} else {
+			            event.getMessage().reply("No existe ningún jugador, puedes crear uno utilizando el comando `!crear`").queue();
 					}
 					
 				} catch (SQLException e) {
