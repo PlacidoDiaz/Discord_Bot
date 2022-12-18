@@ -31,11 +31,14 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 			config = Dotenv.configure().ignoreIfMissing().load();
 			String token = config.get("TOKEN");
 
+			// CONEXIÓN BD
+			DbConnection dbc = new DbConnection();
+			Connection cn = dbc.getConnection();
 			
 			JDA jda = JDABuilder.createDefault(token)
 			.setActivity(Activity.listening(" tutoriales "))
 			.setStatus(OnlineStatus.ONLINE)
-			.addEventListeners(new Comandos())
+			.addEventListeners(new Comandos(cn))
 			.setChunkingFilter(ChunkingFilter.ALL) // Ver todos los miembros
 			.setMemberCachePolicy(MemberCachePolicy.ALL)
 			.enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES) // Permite tener acceso a los mensajes enviados (necesita verificación en la aplicacion web)
