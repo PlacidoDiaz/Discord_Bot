@@ -111,11 +111,15 @@ public class Comandos extends ListenerAdapter {
 					Connection cn = dbc.getConnection();
 					JugadorControlador jugadorControlador=new JugadorControlador(cn);
 				
-					// AÑADIR JUGADOR
-					if(jugadorControlador.agregarJugador(nuevoJugador)) {
-						event.getMessage().reply("Jugador añadido").queue();
+					Jugador jugador = jugadorControlador.getJugador(idDiscord);
+					if(jugador==null) {
+						if(jugadorControlador.agregarJugador(nuevoJugador)) {
+							event.getMessage().reply("Jugador añadido").queue();
+						} else {
+							event.getMessage().reply("No se puedo añadido").queue();
+						}					
 					} else {
-						event.getMessage().reply("No se puedo añadido").queue();
+			            event.getMessage().reply("El jugador ya existe").queue();
 					}
 					
 				} catch (SQLException e) {
