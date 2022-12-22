@@ -30,7 +30,7 @@ public class Jugador {
 	public Jugador() {
 		this.dinero = 100;
 		this.lvl = 1;
-		this.exp = 0;
+		this.exp = 50;
 		this.porcentaje = 0.00;
 		this.att = 5;
 		this.def = 5;

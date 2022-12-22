@@ -28,4 +28,14 @@ public class JugadorControlador {
 		return agregado;
 	}
 	
+	public boolean ganaEXPJugador(int EXP, Jugador jugador) throws SQLException {
+		boolean agregado=false;
+		JugadorDao jugadorDao=new JugadorDao(cn);
+		int EXPtotal = jugador.getExp()+EXP;
+		int nuevoNivel = jugadorDao.devuelveNivelNuevo(EXPtotal);
+		jugadorDao.actualizaNivelJugador(nuevoNivel ,EXPtotal, jugador);
+		agregado=true;
+		return agregado;
+	}
+	
 }

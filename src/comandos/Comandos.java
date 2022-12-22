@@ -124,8 +124,8 @@ public class Comandos extends ListenerAdapter {
             
 			try {
 				JugadorControlador jugadorControlador=new JugadorControlador(cn);
-			
 				Jugador jugador = jugadorControlador.getJugador(idDiscord);
+				
 				if(jugador==null) {
 					if(jugadorControlador.agregarJugador(nuevoJugador)) {
 						event.getMessage().reply("Jugador añadido").queue();
@@ -142,6 +142,33 @@ public class Comandos extends ListenerAdapter {
 			
         }
         
+        // AÑADIR EXPERIENCIA (aumenta nivel)
+        if (event.getMessage().getContentRaw().startsWith(prefix+"addEXP")) {
+        	event.getChannel().sendTyping().queue(); // aparece bot escribiendo
+        	try {
+	            String mensaje = event.getMessage().getContentRaw();
+	            mensaje = mensaje.replaceAll(" ", "");
+	            String exp = mensaje.replaceAll("!addEXP", "");
+            	int expINT = Integer.parseInt(exp);
+            	
+            	JugadorControlador jugadorControlador = new JugadorControlador(cn);
+				String idDiscord = String.valueOf(event.getAuthor().getIdLong());
+				Jugador jugador = jugadorControlador.getJugador(idDiscord);		
+				
+				if(jugador!=null) {
+					jugadorControlador.ganaEXPJugador(expINT, jugador);
+					event.getMessage().reply("Experiencia añadida correctamente").queue();	
+				} else {
+		            event.getMessage().reply("No existe ningún jugador, puedes crear uno utilizando el comando `!crear`").queue();
+				}
+            	
+			} catch (Exception e) {
+	            event.getMessage().reply("error").queue();
+			}
+			
+        }
+        
+         
     }
 	 @Override
 	public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
